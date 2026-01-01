@@ -21,6 +21,7 @@ namespace ann
         : activation_(std::move(activation)),
           index_(index)
     {
+        output_weights_.reserve(num_outputs);
         for (std::size_t i{0}; i < num_outputs; ++i)
         {
             output_weights_.emplace_back(get_random_weight());
