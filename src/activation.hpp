@@ -27,4 +27,15 @@ namespace ann::activation
         return output * (1.0 - output);
     }
 
+    // Hyperbolic tangent function
+    [[nodiscard]] constexpr auto tanh(double x) -> double
+    {
+        return std::tanh(x);
+    }
+
+    [[nodiscard]] constexpr auto tanh_derivative(double x) -> double
+    {
+        return 1.0 - (x * x);
+    }
+
 } // namespace ann::activation
