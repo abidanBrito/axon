@@ -1,10 +1,11 @@
 add_executable(ann_tests
-    neuron_test.cpp
+  neuron_test.cpp
+  network_test.cpp
 )
 
 target_link_libraries(ann_tests PRIVATE
-    ann_core
-    GTest::gtest_main
+  ann_core
+  GTest::gtest_main
 )
 
 set_target_properties(ann_tests PROPERTIES
