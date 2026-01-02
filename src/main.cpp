@@ -26,8 +26,8 @@ auto main() -> int
     inputs.emplace_back(create_input_neuron(0.25, 1, 1));
 
     // Output layer: 1 neuron
-    Neuron::Activation activation{.function = activation::linear,
-                                  .derivative = activation::linear_derivative};
+    Activation activation{.function = activation::linear,
+                          .derivative = activation::linear_derivative};
     Neuron output(0, 0, activation);
 
     // Forward pass

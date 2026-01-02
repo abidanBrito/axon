@@ -8,18 +8,17 @@
 
 namespace ann
 {
+    struct Activation
+    {
+        using Function = std::function<double(double)>;
+
+        Function function;
+        Function derivative;
+    };
 
     class Neuron
     {
     public:
-        struct Activation
-        {
-            using Function = std::function<double(double)>;
-
-            Function function;
-            Function derivative;
-        };
-
         Neuron(std::size_t num_outputs, std::size_t index,
                std::optional<Activation> activation = std::nullopt);
 
