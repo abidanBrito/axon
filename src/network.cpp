@@ -45,6 +45,21 @@ namespace ann
         }
     }
 
+    [[nodiscard]] auto Network::get_output() const -> std::vector<double>
+    {
+        std::vector<double> output;
+
+        const auto& output_layer = layers_.back();
+        output.reserve(output_layer.size() - 1);
+
+        for (std::size_t i{0}; i < output_layer.size() - 1; ++i)
+        {
+            output.push_back(output_layer[i].get_output());
+        }
+
+        return output;
+    }
+
     auto Network::feed_forward(const std::vector<double>& inputs) -> void
     {
         if (inputs.size() != layers_[0].size() - 1)
@@ -68,21 +83,6 @@ namespace ann
                 current_layer[neuron_idx].feed_forward(prev_layer);
             }
         }
-    }
-
-    [[nodiscard]] auto Network::get_output() const -> std::vector<double>
-    {
-        std::vector<double> output;
-
-        const auto& output_layer = layers_.back();
-        output.reserve(output_layer.size() - 1);
-
-        for (std::size_t i{0}; i < output_layer.size() - 1; ++i)
-        {
-            output.push_back(output_layer[i].get_output());
-        }
-
-        return output;
     }
 
 } // namespace ann

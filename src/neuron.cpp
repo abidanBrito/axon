@@ -16,16 +16,29 @@ namespace ann
 
             return distribution(prng);
         }
+
+        auto sum_weighted_gradients(const std::vector<Connection>& connections,
+                                    const std::vector<Neuron>& next_layer) -> double
+        {
+            double sum{0.0};
+            for (std::size_t i{0}; i < next_layer.size() - 1; ++i)
+            {
+                sum += connections[i].weight * next_layer[i].get_gradient();
+            }
+
+            return sum;
+        }
+
     } // namespace
 
     Neuron::Neuron(std::size_t num_outputs, std::size_t index, std::optional<Activation> activation)
         : activation_(std::move(activation)),
           index_(index)
     {
-        output_weights_.reserve(num_outputs);
+        connections_.reserve(num_outputs);
         for (std::size_t i{0}; i < num_outputs; ++i)
         {
-            output_weights_.emplace_back(get_random_weight());
+            connections_.emplace_back(get_random_weight());
         }
     }
 
@@ -39,10 +52,16 @@ namespace ann
         double sum{0.0};
         for (const auto& neuron : prev_layer)
         {
-            sum += neuron.get_output() * neuron.get_weights()[index_].weight;
+            sum += neuron.get_output() * neuron.get_connections()[index_].weight;
         }
 
         output_value_ = activation_->function(sum);
+    }
+
+    auto Neuron::compute_hidden_gradient(std::vector<Neuron>& next_layer) -> void
+    {
+        const double dow = sum_weighted_gradients(connections_, next_layer);
+        gradient_ = dow * activation_->derivative(output_value_);
     }
 
 } // namespace ann
