@@ -6,8 +6,10 @@ namespace ann
 {
     constexpr double bias_constant{1.0};
 
-    Network::Network(const std::vector<std::size_t>& layer_sizes, Activation activation)
-        : activation_(std::move(activation))
+    Network::Network(const std::vector<std::size_t>& layer_sizes, Activation activation,
+                     Criterion criterion)
+        : activation_(std::move(activation)),
+          criterion_(std::move(criterion))
     {
         if (layer_sizes.empty())
         {
@@ -81,6 +83,50 @@ namespace ann
             for (std::size_t neuron_idx{0}; neuron_idx < current_layer.size() - 1; ++neuron_idx)
             {
                 current_layer[neuron_idx].feed_forward(prev_layer);
+            }
+        }
+    }
+
+    auto Network::compute_loss(const std::vector<double>& targets) -> double
+    {
+        targets_ = targets;
+        error_ = 0.0;
+
+        const auto& output_layer = layers_.back();
+        for (std::size_t i = 0; i < output_layer.size() - 1; ++i)
+        {
+            const double target = targets[i];
+            const double output = output_layer[i].get_output();
+            error_ += criterion_.function(target, output);
+        }
+
+        error_ /= static_cast<double>(output_layer.size() - 1);
+
+        return error_;
+    }
+
+    auto Network::back_propagate() -> void
+    {
+        // Output layer gradients
+        auto& output_layer = layers_.back();
+        for (std::size_t i{0}; i < output_layer.size() - 1; ++i)
+        {
+            const double target = targets_[i];
+            const double output = output_layer[i].get_output();
+            const double gradient =
+                criterion_.derivative(target, output) * activation_.derivative(output);
+            output_layer[i].set_gradient(gradient);
+        }
+
+        // Hidden layer gradients
+        for (std::size_t layer_idx = layers_.size() - 2; layer_idx > 0; --layer_idx)
+        {
+            auto& hidden_layer = layers_[layer_idx];
+            auto& next_layer = layers_[layer_idx + 1];
+
+            for (auto& neuron : hidden_layer)
+            {
+                neuron.compute_hidden_gradient(next_layer);
             }
         }
     }
