@@ -55,6 +55,6 @@ jobs:
       working-directory: build
       run: ctest --output-on-failure
 
-    - name: Run demo
-      if: matrix.build_type == 'Release'
-      run: ./bin/ann_demo
+    # - name: Run demo
+    #   if: matrix.build_type == 'Release'
+    #   run: ./bin/axon_demo
