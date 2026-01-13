@@ -73,4 +73,4 @@ A lightweight deep learning framework built from first principles in modern C++.
 - [ ] Youden's J index.
 
 ## LICENSE
-This repository is released under the MIT license. See [LICENSE.md](LICENSE.md) for more information.
+This repository is released under the MIT license. See [LICENSE](LICENSE) for more information.
