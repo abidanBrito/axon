@@ -7,3 +7,4 @@ function(add_axon_example_executable name)
 endfunction()
 
 add_axon_example_executable(xor_gate)
+add_axon_example_executable(function_approximation)
