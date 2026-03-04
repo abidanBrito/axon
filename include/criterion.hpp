@@ -11,7 +11,7 @@ namespace axon::criterion
 
     [[nodiscard]] inline auto mse_derivative(double target, double output) -> double
     {
-        return output - target;
+        return 2 * (output - target);
     }
 
 } // namespace axon::criterion
