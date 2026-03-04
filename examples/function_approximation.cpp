@@ -42,7 +42,7 @@ auto main() -> int
 {
     std::println("=== Function Approximation: f(x) = sin(x) ===\n");
 
-    const std::vector<std::size_t> topology = {1, 256, 128, 64, 1};
+    const std::vector<std::size_t> topology = {1, 32, 16, 1};
 
     Activation activation{.function = activation::tanh, .derivative = activation::tanh_derivative};
     Criterion criterion{.function = criterion::mse, .derivative = criterion::mse_derivative};
@@ -52,7 +52,7 @@ auto main() -> int
     constexpr std::size_t num_train_samples = 1500;
     constexpr double learning_rate = 0.01;
     constexpr double momentum = 0.75;
-    constexpr std::size_t num_epochs = 150;
+    constexpr std::size_t num_epochs = 2000;
 
     auto train_dataset = generate_sin_dataset(num_train_samples, 0.002);
 
@@ -62,9 +62,14 @@ auto main() -> int
     std::println("\tMomentum: {}", momentum);
     std::println("\tEpochs: {}\n", num_epochs);
 
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
     for (std::size_t epoch = 0; epoch < num_epochs; ++epoch)
     {
+        std::ranges::shuffle(train_dataset, rng);
         double epoch_loss = 0.0;
+
         for (const auto& [inputs, targets] : train_dataset)
         {
             net.feed_forward(inputs);
@@ -75,7 +80,8 @@ auto main() -> int
 
         epoch_loss /= static_cast<double>(train_dataset.size());
 
-        std::println("(Epoch {:3d}) loss = {:.6f}", epoch + 1, epoch_loss);
+        std::print("\r(Epoch {:3d}) loss = {:.6f}", epoch + 1, epoch_loss);
+        std::fflush(stdout);
     }
 
     std::println("\n=== Testing ===\n");
