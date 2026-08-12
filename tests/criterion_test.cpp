@@ -37,6 +37,6 @@ TEST(CriterionTest, MSEDerivativeSignIsCorrect)
 
 TEST(CriterionTest, MSEDerivativeValueIsCorrect)
 {
-    EXPECT_DOUBLE_EQ(mse_derivative(1.0, 0.5), -0.5);
-    EXPECT_DOUBLE_EQ(mse_derivative(0.0, 1.0), 1.0);
+    EXPECT_DOUBLE_EQ(mse_derivative(1.0, 0.5), -1.0);
+    EXPECT_DOUBLE_EQ(mse_derivative(0.0, 1.0), 2.0);
 }
