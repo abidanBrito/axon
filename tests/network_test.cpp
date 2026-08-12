@@ -23,6 +23,11 @@ TEST_F(NetworkTest, ThrowsOnEmptyTopology)
     EXPECT_THROW(Network({}, activation, criterion), std::invalid_argument);
 }
 
+TEST_F(NetworkTest, ThrowsOnSingleLayerTopology)
+{
+    EXPECT_THROW(Network({2}, activation, criterion), std::invalid_argument);
+}
+
 TEST_F(NetworkTest, ThrowsOnTooFewInputs)
 {
     Network net({2, 4, 1}, activation, criterion);
