@@ -11,9 +11,10 @@ namespace axon
         : activation_(std::move(activation)),
           criterion_(std::move(criterion))
     {
-        if (layer_sizes.empty())
+        if (constexpr std::size_t min_allowed_layers{2}; layer_sizes.size() < min_allowed_layers)
         {
-            throw std::invalid_argument("The network can not be empty.");
+            throw std::invalid_argument(
+                "The network must have at least an input and output layer.");
         }
 
         layers_.reserve(layer_sizes.size());
