@@ -52,7 +52,7 @@ auto main() -> int
     constexpr std::size_t num_train_samples = 1500;
     constexpr double learning_rate = 0.01;
     constexpr double momentum = 0.75;
-    constexpr std::size_t num_epochs = 2000;
+    constexpr std::size_t num_epochs = 500;
 
     auto train_dataset = generate_sin_dataset(num_train_samples, 0.002);
 
@@ -64,6 +64,9 @@ auto main() -> int
 
     std::random_device rd;
     std::mt19937 rng(rd());
+
+    constexpr int bar_width = 30;
+    const int epoch_width = static_cast<int>(std::log10(num_epochs)) + 1;
 
     for (std::size_t epoch = 0; epoch < num_epochs; ++epoch)
     {
@@ -80,7 +83,24 @@ auto main() -> int
 
         epoch_loss /= static_cast<double>(train_dataset.size());
 
-        std::print("\r(Epoch {:3d}) loss = {:.6f}", epoch + 1, epoch_loss);
+        const int filled = static_cast<int>(bar_width * (epoch + 1) / num_epochs);
+        const int pct = static_cast<int>(100.0 * (epoch + 1) / num_epochs);
+
+        std::print("\r  \033[36mEpoch\033[0m \033[1m{:>{}}/{}\033[0m [{}", epoch + 1, epoch_width,
+                   num_epochs, "\033[32m");
+
+        for (int i = 0; i < bar_width; ++i)
+        {
+            if (i < filled)
+                std::print("█");
+            else if (i == filled)
+                std::print("\033[33m▸\033[90m");
+            else
+                std::print("·");
+        }
+
+        std::print("\033[0m] \033[33m{:3d}%\033[0m | \033[35mloss\033[0m = {:.6f}  ", pct,
+                   epoch_loss);
         std::fflush(stdout);
     }
 
