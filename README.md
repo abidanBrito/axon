@@ -7,6 +7,11 @@ A lightweight deep learning framework built from first principles in modern C++.
 
 ## Features
 
+### Core
+- [ ] Tensor abstraction (contiguous N-dimensional storage).
+- [ ] Matrix-based dense (fully-connected) layers: weight matrix + bias vector.
+- [ ] Refactor per-neuron object model to vectorized layers.
+
 ### Architecture
 - [x] Feedforward networks with arbitrary topology.
 - [x] Bias neurons for learning offsets.
@@ -19,6 +24,7 @@ A lightweight deep learning framework built from first principles in modern C++.
 
 ### Training
 - [x] Backpropagation with automatic gradient computation.
+- [ ] Autograd engine (dynamic computational graph).
 - [x] Gradient descent with momentum optimizer.
 - [x] Configurable learning rate and momentum.
 - [ ] Mini-batch training.
