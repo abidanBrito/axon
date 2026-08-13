@@ -92,7 +92,7 @@ TEST_F(NetworkTest, BackPropagateDoesNotThrow)
     net.feed_forward({0.5, 0.5});
     net.compute_loss({0.0});
 
-    EXPECT_NO_THROW(net.back_propagate());
+    EXPECT_NO_THROW(net.back_propagate({0.0}));
 }
 
 TEST_F(NetworkTest, StepDoesNotThrow)
@@ -101,7 +101,7 @@ TEST_F(NetworkTest, StepDoesNotThrow)
 
     net.feed_forward({0.5, 0.5});
     net.compute_loss({0.0});
-    net.back_propagate();
+    net.back_propagate({0.0});
 
     EXPECT_NO_THROW(net.step(0.1, 0.5));
 }
