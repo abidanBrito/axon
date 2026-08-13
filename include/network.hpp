@@ -30,12 +30,11 @@ namespace axon
 
         auto feed_forward(const std::vector<double>& inputs) -> void;
         auto compute_loss(const std::vector<double>& targets) -> double;
-        auto back_propagate() -> void;
+        auto back_propagate(const std::vector<double>& targets) -> void;
         auto step(double learning_rate = 0.01, double momentum = 0.0) -> void;
 
     private:
         std::vector<std::vector<Neuron>> layers_;
-        std::vector<double> targets_;
         Activation activation_;
         Criterion criterion_;
         double error_{0.0};

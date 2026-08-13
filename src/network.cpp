@@ -96,7 +96,6 @@ namespace axon
             throw std::invalid_argument("Invalid number of targets.");
         }
 
-        targets_ = targets;
         error_ = 0.0;
 
         for (std::size_t i = 0; i < output_layer.size() - 1; ++i)
@@ -111,13 +110,18 @@ namespace axon
         return error_;
     }
 
-    auto Network::back_propagate() -> void
+    auto Network::back_propagate(const std::vector<double>& targets) -> void
     {
         // Output layer gradients
         auto& output_layer = layers_.back();
+        if (targets.size() != output_layer.size() - 1)
+        {
+            throw std::invalid_argument("Invalid number of targets.");
+        }
+
         for (std::size_t i{0}; i < output_layer.size() - 1; ++i)
         {
-            const double target = targets_[i];
+            const double target = targets[i];
             const double output = output_layer[i].get_output();
             const double gradient =
                 criterion_.derivative(target, output) * activation_.derivative(output);
