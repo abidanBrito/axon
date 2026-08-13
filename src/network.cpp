@@ -90,10 +90,15 @@ namespace axon
 
     auto Network::compute_loss(const std::vector<double>& targets) -> double
     {
+        const auto& output_layer = layers_.back();
+        if (targets.size() != output_layer.size() - 1)
+        {
+            throw std::invalid_argument("Invalid number of targets.");
+        }
+
         targets_ = targets;
         error_ = 0.0;
 
-        const auto& output_layer = layers_.back();
         for (std::size_t i = 0; i < output_layer.size() - 1; ++i)
         {
             const double target = targets[i];
