@@ -77,7 +77,7 @@ auto main() -> int
         {
             net.feed_forward(inputs);
             epoch_loss += net.compute_loss(targets);
-            net.back_propagate();
+            net.back_propagate(targets);
             net.step(learning_rate, momentum);
         }
 

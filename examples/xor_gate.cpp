@@ -31,7 +31,7 @@ auto main() -> int
         {
             net.feed_forward({inputs[0], inputs[1]});
             epoch_loss += net.compute_loss({targets[0]});
-            net.back_propagate();
+            net.back_propagate({targets[0]});
             net.step(0.3, 0.75);
         }
 
