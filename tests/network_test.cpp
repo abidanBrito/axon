@@ -64,6 +64,15 @@ TEST_F(NetworkTest, ComputeLossReturnsNonNegativeValue)
     EXPECT_GE(loss, 0.0);
 }
 
+TEST_F(NetworkTest, ThrowsOnWrongNumberOfTargets)
+{
+    Network net({2, 3, 1}, activation, criterion);
+
+    net.feed_forward({0.5, 0.5});
+
+    EXPECT_THROW(net.compute_loss({0.0, 0.0}), std::invalid_argument);
+}
+
 TEST_F(NetworkTest, LossDecreasesWithPerfectPrediction)
 {
     Network net({2, 3, 1}, activation, criterion);
