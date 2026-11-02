@@ -33,9 +33,9 @@ namespace axon::activation
         return std::tanh(x);
     }
 
-    [[nodiscard]] constexpr auto tanh_derivative(double x) -> double
+    [[nodiscard]] constexpr auto tanh_derivative(double output) -> double
     {
-        return 1.0 - (x * x);
+        return 1.0 - (output * output);
     }
 
     // Rectified linear unit function
