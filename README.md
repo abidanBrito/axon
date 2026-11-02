@@ -33,6 +33,7 @@ A lightweight deep learning framework built from first principles in modern C++.
 - [ ] Dropout.
 - [ ] Gradient clipping.
 - [ ] Data loaders with shuffling.
+- [ ] Seedable RNG for reproducible runs.
 - [ ] Model serialization (save/load weights).
 - [ ] Model checkpointing (save/resume training).
 - [ ] Weight initialization strategies: Xavier/Glorot, He/Kaiming.
@@ -77,6 +78,19 @@ A lightweight deep learning framework built from first principles in modern C++.
 - [ ] Visualization tools.
 - [ ] Confusion matrix.
 - [ ] Youden's J index.
+
+### Testing
+- [ ] Gradient checking (finite-difference verification).
+- [ ] Overfit a single batch to near-zero loss (Karpathy, 2019).
+
+## References
+- David E. Rumelhart et al., [Learning representations by back-propagating errors](https://doi.org/10.1038/323533a0) (1986).
+- George Cybenko, [Approximation by superpositions of a sigmoidal function](https://doi.org/10.1007/BF02551274) (1989).
+- Yann LeCun et al., [Efficient BackProp](https://doi.org/10.1007/3-540-49430-8_2) (1998).
+- David Miller, [Neural Net in C++ Tutorial](https://millermattson.com/dave/?p=54).
+- Michael Nielsen, [Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/) (2015).
+- John D. Kelleher, [Deep Learning](https://mitpress.mit.edu/9780262537551/deep-learning/) (2019).
+- Andrej Karpathy, [A Recipe for Training Neural Networks](http://karpathy.github.io/2019/04/25/recipe/) (2019).
 
 ## LICENSE
 This repository is released under the MIT license. See [LICENSE](LICENSE) for more information.
