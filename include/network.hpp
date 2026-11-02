@@ -2,6 +2,7 @@
 
 #include "neuron.hpp"
 
+#include <functional>
 #include <vector>
 
 namespace axon
@@ -30,6 +31,9 @@ namespace axon
         {
             return error_;
         }
+
+        [[nodiscard]] auto parameters() -> std::vector<std::reference_wrapper<double>>;
+        [[nodiscard]] auto parameter_gradients() const -> std::vector<double>;
 
         auto feed_forward(const std::vector<double>& inputs) -> void;
         auto compute_loss(const std::vector<double>& targets) -> double;

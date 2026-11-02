@@ -154,6 +154,52 @@ namespace axon
         }
     }
 
+    auto Network::parameters() -> std::vector<std::reference_wrapper<double>>
+    {
+        std::vector<std::reference_wrapper<double>> params;
+
+        for (std::size_t layer_idx{0}; layer_idx + 1 < layers_.size(); ++layer_idx)
+        {
+            auto& layer = layers_[layer_idx];
+            const std::size_t num_outputs = layers_[layer_idx + 1].size() - 1;
+
+            for (std::size_t i{0}; i < layer.size(); ++i)
+            {
+                auto& connections = layer[i].get_connections();
+                for (std::size_t j{0}; j < num_outputs; ++j)
+                {
+                    params.emplace_back(connections[j].weight);
+                }
+            }
+        }
+
+        return params;
+    }
+
+    auto Network::parameter_gradients() const -> std::vector<double>
+    {
+        std::vector<double> gradients;
+
+        for (std::size_t layer_idx{0}; layer_idx + 1 < layers_.size(); ++layer_idx)
+        {
+            const auto& current_layer = layers_[layer_idx];
+            const auto& next_layer = layers_[layer_idx + 1];
+            const std::size_t num_outputs = next_layer.size() - 1;
+
+            for (std::size_t i{0}; i < current_layer.size(); ++i)
+            {
+                // dLoss/dweight(i->j)
+                const double output_i = current_layer[i].get_output();
+                for (std::size_t j{0}; j < num_outputs; ++j)
+                {
+                    gradients.push_back(next_layer[j].get_gradient() * output_i);
+                }
+            }
+        }
+
+        return gradients;
+    }
+
     auto Network::step(double learning_rate, double momentum) -> void
     {
         for (std::size_t layer_idx{layers_.size() - 1}; layer_idx > 0; --layer_idx)
