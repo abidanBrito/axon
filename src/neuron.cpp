@@ -58,6 +58,11 @@ namespace axon
         output_value_ = activation_->function(sum);
     }
 
+    auto Neuron::compute_output_gradient(double loss_derivative) -> void
+    {
+        gradient_ = loss_derivative * activation_->derivative(output_value_);
+    }
+
     auto Neuron::compute_hidden_gradient(std::vector<Neuron>& next_layer) -> void
     {
         const double dow = sum_weighted_gradients(connections_, next_layer);

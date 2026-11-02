@@ -49,6 +49,7 @@ namespace axon
         }
 
         auto feed_forward(const std::vector<Neuron>& prev_layer) -> void;
+        auto compute_output_gradient(double loss_derivative) -> void;
         auto compute_hidden_gradient(std::vector<Neuron>& next_layer) -> void;
         auto update_incoming_weights(std::vector<Neuron>& prev_layer, double learning_rate,
                                      double momentum) const -> void;

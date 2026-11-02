@@ -6,15 +6,21 @@ namespace axon
 {
     constexpr double bias_constant{1.0};
 
-    Network::Network(const std::vector<std::size_t>& layer_sizes, Activation activation,
-                     Criterion criterion)
-        : activation_(std::move(activation)),
-          criterion_(std::move(criterion))
+    Network::Network(const std::vector<std::size_t>& layer_sizes,
+                     std::vector<Activation> activations, Criterion criterion)
+        : criterion_(std::move(criterion))
     {
         if (constexpr std::size_t min_allowed_layers{2}; layer_sizes.size() < min_allowed_layers)
         {
             throw std::invalid_argument(
                 "The network must have at least an input and output layer.");
+        }
+
+        // One activation per (non-input) layer
+        if (activations.size() != layer_sizes.size() - 1)
+        {
+            throw std::invalid_argument(
+                "The number of activations must match the number of non-input layers.");
         }
 
         layers_.reserve(layer_sizes.size());
@@ -38,7 +44,7 @@ namespace axon
                 }
                 else
                 {
-                    layer.emplace_back(num_outputs, neuron_idx, activation_);
+                    layer.emplace_back(num_outputs, neuron_idx, activations[layer_idx - 1]);
                 }
             }
 
@@ -46,6 +52,15 @@ namespace axon
             layer.emplace_back(num_outputs, num_neurons);
             layer.back().set_output(bias_constant);
         }
+    }
+
+    Network::Network(const std::vector<std::size_t>& layer_sizes, const Activation& activation,
+                     Criterion criterion)
+        : Network(layer_sizes,
+                  std::vector<Activation>(layer_sizes.size() < 2 ? 0 : layer_sizes.size() - 1,
+                                          activation),
+                  std::move(criterion))
+    {
     }
 
     [[nodiscard]] auto Network::get_output() const -> std::vector<double>
@@ -123,9 +138,7 @@ namespace axon
         {
             const double target = targets[i];
             const double output = output_layer[i].get_output();
-            const double gradient =
-                criterion_.derivative(target, output) * activation_.derivative(output);
-            output_layer[i].set_gradient(gradient);
+            output_layer[i].compute_output_gradient(criterion_.derivative(target, output));
         }
 
         // Hidden layer gradients

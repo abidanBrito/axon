@@ -18,8 +18,11 @@ namespace axon
     class Network
     {
     public:
-        explicit Network(const std::vector<std::size_t>& layer_sizes, Activation activation,
-                         Criterion criterion);
+        Network(const std::vector<std::size_t>& layer_sizes, std::vector<Activation> activations,
+                Criterion criterion);
+
+        Network(const std::vector<std::size_t>& layer_sizes, const Activation& activation,
+                Criterion criterion);
 
         [[nodiscard]] auto get_output() const -> std::vector<double>;
 
@@ -35,7 +38,6 @@ namespace axon
 
     private:
         std::vector<std::vector<Neuron>> layers_;
-        Activation activation_;
         Criterion criterion_;
         double error_{0.0};
     };

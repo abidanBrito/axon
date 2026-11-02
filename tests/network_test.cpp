@@ -28,6 +28,20 @@ TEST_F(NetworkTest, ThrowsOnSingleLayerTopology)
     EXPECT_THROW(Network({2}, activation, criterion), std::invalid_argument);
 }
 
+TEST_F(NetworkTest, CreationWithPerLayerActivations)
+{
+    std::vector<Activation> activations{activation, activation};
+
+    EXPECT_NO_THROW(Network({2, 4, 1}, activations, criterion));
+}
+
+TEST_F(NetworkTest, ThrowsOnWrongNumberOfActivations)
+{
+    std::vector<Activation> activations{activation};
+
+    EXPECT_THROW(Network({2, 4, 1}, activations, criterion), std::invalid_argument);
+}
+
 TEST_F(NetworkTest, ThrowsOnTooFewInputs)
 {
     Network net({2, 4, 1}, activation, criterion);
