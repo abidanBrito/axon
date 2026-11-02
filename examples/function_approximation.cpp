@@ -44,10 +44,15 @@ auto main() -> int
 
     const std::vector<std::size_t> topology = {1, 32, 16, 1};
 
-    Activation activation{.function = activation::tanh, .derivative = activation::tanh_derivative};
+    Activation tanh{.function = activation::tanh, .derivative = activation::tanh_derivative};
+    Activation linear{.function = activation::linear, .derivative = activation::linear_derivative};
     Criterion criterion{.function = criterion::mse, .derivative = criterion::mse_derivative};
 
-    Network net(topology, activation, criterion);
+    // NOTE(abi): we use tanh for the hidden layers with a linear output, so that
+    //            the fit is not squashed into (-1, 1).
+    std::vector<Activation> activations{tanh, tanh, linear};
+
+    Network net(topology, activations, criterion);
 
     constexpr std::size_t num_train_samples = 1500;
     constexpr double learning_rate = 0.01;
